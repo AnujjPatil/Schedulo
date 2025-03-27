@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -37,6 +36,7 @@ model Server {
 
   members  Member[]
   channels Channel[]
+  projects Project[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -64,6 +64,8 @@ model Member {
   messages       Message[]
   directMessages DirectMessage[]
  
+  projectsLed    Project[]        @relation("ProjectLead")
+  projectMemberships ProjectMember[]
 
   conversationsInitiated Conversation[] @relation("MemberOne")
   conversationsReceived  Conversation[] @relation("MemberTwo")
@@ -156,4 +158,78 @@ model DirectMessage {
 
   @@index([memberId])
   @@index([conversationId])
+}
+
+enum ProjectStatus {
+  BACKLOG
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+enum ProjectPriority {
+  NO_PRIORITY
+  URGENT
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  summary     String?         @db.Text
+  description String?         @db.Text
+  status      ProjectStatus   @default(BACKLOG)
+  priority    ProjectPriority @default(NO_PRIORITY)
+  
+  leadId      String?
+  lead        Member?         @relation("ProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  
+  serverId    String
+  server      Server          @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  
+  members     ProjectMember[]
+  milestones  Milestone[]
+  
+  startDate   DateTime?
+  targetDate  DateTime?
+  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  @@index([serverId])
+  @@index([leadId])
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([projectId, memberId])
+  @@index([projectId])
+  @@index([memberId])
+}
+
+model Milestone {
+  id        String   @id @default(uuid())
+  name      String
+  completed Boolean  @default(false)
+  
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([projectId])
 }

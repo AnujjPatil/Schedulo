@@ -1,3 +1,4 @@
+
 'use client'
 
 import * as z from 'zod'
@@ -24,26 +25,19 @@ import {
 } from '@/components/ui/form'
 
 import { Input } from '@/components/ui/input'
-
 import { Button } from '@/components/ui/button'
 import { FileUpload } from '@/components/file-upload'
 import { useRouter } from 'next/navigation'
 import { useModal } from '@/hooks/use-modal-store'
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: 'Server Name Required',
-  }),
-  imageUrl: z.string().min(1, {
-    message: 'Server Image Required',
-  }),
+  name: z.string().min(1, { message: 'Server Name Required' }).max(15, { message: 'Server Name must be at most 15 characters' }),
+  imageUrl: z.string().min(1, { message: 'Server Image Required' }),
 })
 
 export const CreateServerModal = () => {
   const { isOpen, onClose, type } = useModal()
-
   const isModalOpen = isOpen && type === 'createServer'
-
   const router = useRouter()
 
   const form = useForm({
@@ -59,7 +53,6 @@ export const CreateServerModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post('/api/servers', values)
-
       form.reset()
       router.refresh()
       onClose()
@@ -75,20 +68,13 @@ export const CreateServerModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent
-        className='bg-white text-black p-0 overflow-hidden'
-        aria-describedby='create-channel'
-      >
+      <DialogContent className='bg-white text-black p-0 overflow-hidden' aria-describedby='create-channel'>
         <DialogHeader className='pt-8 px-6'>
-          <DialogTitle
-            id='customize-server'
-            className='text-2xl text-center font-bold'
-          >
+          <DialogTitle id='customize-server' className='text-2xl text-center font-bold'>
             Customize Your Server
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            Give your server a custom look with a name and image. It can be
-            changed later...
+            Give your server a custom look with a name and image. It can be changed later...
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -101,11 +87,7 @@ export const CreateServerModal = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FileUpload
-                          endpoint='serverImage'
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
+                        <FileUpload endpoint='serverImage' value={field.value} onChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}

@@ -34,6 +34,8 @@ import { useModal } from '@/hooks/use-modal-store'
 const formSchema = z.object({
   name: z.string().min(1, {
     message: 'Server Name Required',
+  }).max(15, {
+    message: 'Channel Name must be at most 15 characters',
   }),
   imageUrl: z.string().min(1, {
     message: 'Server Image Required',

@@ -18,7 +18,7 @@ import ShortcutKey from './shortcut-component/ShortcutKey'
 interface ServerSearchProps {
   data: {
     label: string
-    type: 'channel' | 'member'
+    type: 'channel' | 'member' | 'project'
     data:
       | {
           icon: React.ReactNode
@@ -51,7 +51,7 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
     type,
   }: {
     id: string
-    type: 'channel' | 'member'
+    type: 'channel' | 'member' | 'project'
   }) => {
     setOpen(false)
 
@@ -61,6 +61,10 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
 
     if (type === 'channel') {
       return router.push(`/servers/${params?.serverId}/channels/${id}`)
+    }
+
+    if (type === 'project') {
+      return router.push(`/servers/${params?.serverId}/projects/${id}`)
     }
   }
 
@@ -77,7 +81,7 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
         <ShortcutKey />
       </button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder='Search All Channels and Members' />
+        <CommandInput placeholder='Search All Channels, Members and Projects' />
         <CommandList>
           <CommandEmpty>No Results Found...</CommandEmpty>
           {data.map(({ label, type, data }) => {

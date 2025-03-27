@@ -13,6 +13,14 @@ export type ModalType =
   | 'editChannel'
   | 'messageFile'
   | 'deleteMessage'
+  | 'createProject'
+  | 'editProject'
+  | 'deleteProject'
+  | 'addProjectMember'
+  | 'removeProjectMember'
+  | 'addProjectMilestone'
+  | 'editProjectMilestone'
+  | 'deleteProjectMilestone'
 
 interface ModalData {
   server?: Server
@@ -20,6 +28,11 @@ interface ModalData {
   channelType?: ChannelType
   apiUrl?: string
   query?: Record<string, any>
+  project?: any
+  serverId?: string
+  memberId?: string
+  memberName?: string
+  milestone?: any
 }
 
 interface ModalStore {
@@ -28,12 +41,18 @@ interface ModalStore {
   isOpen: boolean
   onOpen: (type: ModalType, data?: ModalData) => void
   onClose: () => void
+  onProjectDeleted: (serverId: string) => void
 }
 
 export const useModal = create<ModalStore>((set) => ({
   type: null,
   data: {} as ModalData,
   isOpen: false,
-  onOpen: (type, data) => set({ isOpen: true, type, data }),
-  onClose: () => set({ type: null, isOpen: false, data: {} }),
+  onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
+  onClose: () => set({ type: null, isOpen: false }),
+  onProjectDeleted: (serverId: string) => {
+    // This function will be called after a project is deleted
+    // It will close the modal and trigger a UI refresh
+    set({ type: null, isOpen: false })
+  }
 }))
