@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Box, Typography, Paper, Button, TextField, Grid, CircularProgress } from '@mui/material';
+import { Box, Typography, Paper, Button, TextField, CircularProgress } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import ImageUpload from '../common/ImageUpload';
 import TaskList from './TaskList';
