@@ -72,7 +72,7 @@ export const EditProjectMilestoneModal = () => {
       form.setValue("status", milestone.status);
       
       if (milestone.targetDate) {
-        form.setValue("targetDate", new Date(milestone.targetDate));
+        form.setValue("targetDate", milestone.targetDate);
       }
     }
   }, [milestone, form]);
