@@ -1,3 +1,4 @@
+// Trigger redeploy - test commit
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs/server'
@@ -51,7 +52,7 @@ const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
 
   return (
     <div className='h-full'>
-      <ProjectTabs project={project} />
+      <ProjectTabs project={project} serverId={params.serverId} />
     </div>
   )
 }
