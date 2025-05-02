@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/current-profile";
+import { initialProfile } from "@/lib/initial-profile";
 
 const InviteCodePage = async ({
   params
 }: {
   params: { inviteCode: string }
 }) => {
-  const profile = await currentProfile();
+  const profile = await initialProfile();
 
   if (!profile) {
     return redirect("/sign-in");
