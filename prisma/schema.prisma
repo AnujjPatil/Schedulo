@@ -227,6 +227,7 @@ model ProjectMember {
 model Milestone {
   id        String   @id @default(uuid())
   name      String
+  description String?
   completed Boolean  @default(false)
   
   projectId String
