@@ -34,8 +34,7 @@ export default authMiddleware({
     "/api/webhook"
   ],
   ignoredRoutes: [
-    "/api/webhook",
-    "/api/uploadthing"
+    "/api/webhook"
   ]
 });
 
