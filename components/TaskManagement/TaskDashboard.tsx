@@ -83,7 +83,7 @@ export const TaskDashboard = () => {
   };
 
   const handleAddComment = async () => {
-    if (!selectedTask || !newComment.trim()) return;
+    if (!selectedTask || !newComment.trim() || !user) return;
 
     try {
       let imageUrl = '';
