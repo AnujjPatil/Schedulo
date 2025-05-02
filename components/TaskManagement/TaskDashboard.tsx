@@ -46,10 +46,10 @@ export const TaskDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (params.projectId) {
+    if (params && params.projectId) {
       fetchTasks();
     }
-  }, [params.projectId]);
+  }, [params?.projectId]);
 
   const fetchTasks = async () => {
     try {
