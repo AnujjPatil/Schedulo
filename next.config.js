@@ -4,20 +4,15 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: [
-      'uploadthing.com',
-      'utfs.io',
-      'img.clerk.com',
-      'images.clerk.dev'
-    ],
+      "uploadthing.com",
+      "utfs.io"
+    ]
   },
   typescript: {
     ignoreBuildErrors: false,
   },
   eslint: {
     ignoreDuringBuilds: false,
-  },
-  experimental: {
-    serverActions: true,
   },
 }
 
