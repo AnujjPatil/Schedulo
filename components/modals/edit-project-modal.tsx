@@ -129,7 +129,7 @@ export const EditProjectModal = () => {
 
       // Set members
       if (project.members) {
-        setSelectedMembers(project.members.map(member => member.id))
+        setSelectedMembers(project.members.map((member: { id: string }) => member.id))
       }
     }
   }, [project, form])
