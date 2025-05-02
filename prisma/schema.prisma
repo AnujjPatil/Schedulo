@@ -230,6 +230,7 @@ model Milestone {
   description String?
   completed Boolean  @default(false)
   targetDate DateTime?
+  status    String?
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
