@@ -106,8 +106,8 @@ export const EditProjectModal = () => {
         status: project.status,
         priority: project.priority,
         leadId: project.leadId || '',
-        startDate: project.startDate ? new Date(project.startDate) : undefined,
-        targetDate: project.targetDate ? new Date(project.targetDate) : undefined,
+        startDate: project.startDate,
+        targetDate: project.targetDate,
       })
 
       // Set active status
