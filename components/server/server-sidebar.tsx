@@ -3,6 +3,7 @@
 import { redirect, useParams } from 'next/navigation'
 import { ChannelType, MemberRole } from '@prisma/client'
 import { useEffect } from 'react';
+import axios from 'axios';
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -50,7 +51,7 @@ export const ServerSidebar = ({
   role
 }: ServerSidebarProps) => {
   const params = useParams();
-  const { setProjects, getServerProjects } = useProjectsStore();
+  const { setProjects, getServerProjects, updateProject, deleteProject } = useProjectsStore();
   
   // Initialize the projects store with the server's projects
   useEffect(() => {
@@ -75,6 +76,33 @@ export const ServerSidebar = ({
     [MemberRole.GUEST]: null,
     [MemberRole.MODERATOR]: <ShieldCheck className="h-4 w-4 mr-2 text-indigo-500" />,
     [MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 mr-2 text-rose-500" />
+  };
+
+  // Handler to rename a project
+  const handleRenameProject = async (projectId, newName) => {
+    try {
+      // Update in backend and get the full updated project
+      const response = await axios.patch(`/api/servers/${serverId}/projects/${projectId}`, { name: newName });
+      const updatedProject = response.data;
+      // Update in store with the full project object
+      updateProject(updatedProject);
+    } catch (err) {
+      // Optionally show error
+      console.error('Failed to rename project', err);
+    }
+  };
+
+  // Handler to delete a project
+  const handleDeleteProject = async (projectId) => {
+    try {
+      // Delete in backend
+      await axios.delete(`/api/servers/${serverId}/projects/${projectId}`);
+      // Remove from store
+      deleteProject(projectId);
+    } catch (err) {
+      // Optionally show error
+      console.error('Failed to delete project', err);
+    }
   };
 
   return (
@@ -150,6 +178,8 @@ export const ServerSidebar = ({
                   key={project.id}
                   project={project}
                   server={server}
+                  onRename={handleRenameProject}
+                  onDelete={handleDeleteProject}
                 />
               ))}
             </div>

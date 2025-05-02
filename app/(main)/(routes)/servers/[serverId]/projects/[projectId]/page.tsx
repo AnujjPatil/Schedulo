@@ -6,7 +6,7 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { ProjectStatus, ProjectPriority } from "@prisma/client";
 import { ProjectHeader } from "@/components/project/project-header";
-import { ProjectSlider } from "@/components/project/project-slider";
+import { ProjectTabs } from "@/components/project/project-tabs";
 
 import { 
   CircleCheck, 
@@ -93,17 +93,19 @@ const ProjectIdPage = async ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-zinc-900 text-white">
+    <div className="flex flex-col h-full bg-background text-foreground">
       {/* Fixed Header */}
-      <div className="sticky top-0 z-10 bg-zinc-900 border-b border-zinc-800 shadow-sm">
+      <div className="sticky top-0 z-10 bg-background border-b border-border shadow-sm">
         <div className="flex items-center p-4">
-          <Package className="h-6 w-6 mr-3 text-zinc-400" />
+          <Package className="h-6 w-6 mr-3 text-muted-foreground" />
           <h1 className="text-xl font-bold truncate">{project.name}</h1>
         </div>
       </div>
 
-      {/* Project Slider */}
-      <ProjectSlider project={project} serverId={params.serverId} />
+      {/* Project Content */}
+      <div className="flex-1 overflow-hidden">
+        <ProjectTabs project={project} serverId={params.serverId} />
+      </div>
     </div>
   );
 }

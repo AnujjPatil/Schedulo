@@ -13,11 +13,17 @@ export const MobileToggle = ({ serverId }: { serverId: string }) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side='left' className='p-0 flex gap-0'>
-        <div className='w-[72px]'>
-          <NavigationSidebar />
+      <SheetContent side='right' className='p-0 flex flex-col gap-0 w-full max-w-xs sm:max-w-sm h-full'>
+        <div className='flex-1 flex flex-col overflow-y-auto'>
+          {/* Server list (NavigationSidebar) */}
+          <div className='border-b border-border'>
+            <NavigationSidebar />
+          </div>
+          {/* Server content menu bar (ServerSidebarWrapper) */}
+          <div className='flex-1 overflow-y-auto'>
+            <ServerSidebarWrapper serverId={serverId} />
+          </div>
         </div>
-        <ServerSidebarWrapper serverId={serverId} />
       </SheetContent>
     </Sheet>
   )

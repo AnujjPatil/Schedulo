@@ -13,6 +13,11 @@ interface ServerSidebarWrapperProps {
 export const ServerSidebarWrapper = async ({
   serverId
 }: ServerSidebarWrapperProps) => {
+  if (!serverId) {
+    // If serverId is not provided, do not render the sidebar
+    return null;
+  }
+
   const profile = await currentProfile();
 
   if (!profile) {
@@ -44,26 +49,15 @@ export const ServerSidebarWrapper = async ({
     return redirect("/");
   }
 
-  // Fetch projects separately
-  const projects = await db.$queryRaw<Array<{
-    id: string;
-    name: string;
-    summary: string | null;
-    description: string | null;
-    status: string;
-    priority: string;
-    leadId: string | null;
-    serverId: string;
-    startDate: Date | null;
-    targetDate: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
-  }>>`
-    SELECT id, name, summary, description, status, priority, "leadId", "serverId", "startDate", "targetDate", "createdAt", "updatedAt"
-    FROM "Project"
-    WHERE "serverId" = ${serverId}
-    ORDER BY "createdAt" ASC
-  `;
+  // Fetch projects using Prisma's query builder
+  const projects = await db.project.findMany({
+    where: {
+      serverId: serverId,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
 
   const textChannels = server.channels?.filter((channel) => channel.type === ChannelType.TEXT) || [];
   const audioChannels = server.channels?.filter((channel) => channel.type === ChannelType.AUDIO) || [];
