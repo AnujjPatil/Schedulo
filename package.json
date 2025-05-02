@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm install --legacy-peer-deps && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "clean": "rm -rf .next",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "install": "npm install --legacy-peer-deps"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.7",
