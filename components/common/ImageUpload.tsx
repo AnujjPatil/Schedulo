@@ -89,9 +89,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, disabled }) =>
         onDrop={handleDrop}
         sx={{
           opacity: disabled ? 0.5 : 1,
-          borderColor: isDragging ? 'primary.main' : undefined,
+          borderColor: isDragging ? 'primary.main' : 'rgba(255, 255, 255, 0.23)',
           color: 'white',
-          borderColor: 'rgba(255, 255, 255, 0.23)',
           '&:hover': {
             borderColor: 'rgba(255, 255, 255, 0.5)',
           },
