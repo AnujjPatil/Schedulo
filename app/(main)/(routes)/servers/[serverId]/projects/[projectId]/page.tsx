@@ -1,113 +1,55 @@
-import { redirect } from "next/navigation";
-import { format } from "date-fns";
-import { Package } from "lucide-react";
-
-import { currentProfile } from "@/lib/current-profile";
-import { db } from "@/lib/db";
-import { ProjectStatus, ProjectPriority } from "@prisma/client";
-import { ProjectHeader } from "@/components/project/project-header";
-import { ProjectTabs } from "@/components/project/project-tabs";
-
-import { 
-  CircleCheck, 
-  Calendar, 
-  Target, 
-  Users, 
-  Plus, 
-  FileEdit, 
-  Link,
-  PenSquare,
-  ChevronDown
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { currentProfile } from '@/lib/current-profile'
+import { db } from '@/lib/db'
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
+import { ProjectTabs } from '@/components/project/project-tabs'
+import { ProjectOverview } from '@/components/project/project-overview'
+import { ProjectTasks } from '@/components/project/project-tasks'
+import { ProjectCalendar } from '@/components/project/project-calendar'
+import { ProjectTaskManagement } from '@/components/project/project-task-management'
 
 interface ProjectIdPageProps {
   params: {
-    serverId: string;
-    projectId: string;
+    projectId: string
+    serverId: string
   }
 }
 
-const ProjectIdPage = async ({
-  params
-}: ProjectIdPageProps) => {
-  const profile = await currentProfile();
+const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
+  const profile = await currentProfile()
 
   if (!profile) {
-    return redirect("/");
+    return auth().redirectToSignIn()
   }
 
   const project = await db.project.findUnique({
     where: {
-      id: params.projectId
+      id: params.projectId,
+      serverId: params.serverId,
     },
     include: {
-      lead: {
-        include: {
-          profile: true
-        }
-      },
       members: {
         include: {
-          member: {
-            include: {
-              profile: true
-            }
-          }
-        }
+          profile: true,
+        },
       },
-      milestones: {
-        orderBy: {
-          createdAt: "asc"
-        }
+      lead: {
+        include: {
+          profile: true,
+        },
       },
-      server: true
-    }
-  });
+    },
+  })
 
   if (!project) {
-    return redirect(`/servers/${params.serverId}`);
+    return redirect('/')
   }
 
-  const formattedStartDate = project.startDate ? format(project.startDate, "MMM d") : "Not set";
-  const formattedTargetDate = project.targetDate ? format(project.targetDate, "MMM yyyy") : "Not set";
-  const createdDate = format(project.createdAt, "MMM d");
-
-  const statusColorMap = {
-    [ProjectStatus.BACKLOG]: "bg-gray-500",
-    [ProjectStatus.PLANNED]: "bg-blue-500",
-    [ProjectStatus.IN_PROGRESS]: "bg-yellow-500",
-    [ProjectStatus.COMPLETED]: "bg-green-500",
-    [ProjectStatus.CANCELED]: "bg-red-500",
-  };
-
-  const priorityColorMap = {
-    [ProjectPriority.NO_PRIORITY]: "bg-gray-500",
-    [ProjectPriority.LOW]: "bg-blue-500",
-    [ProjectPriority.MEDIUM]: "bg-yellow-500",
-    [ProjectPriority.HIGH]: "bg-orange-500",
-    [ProjectPriority.URGENT]: "bg-red-500",
-  };
-
   return (
-    <div className="flex flex-col h-full bg-background text-foreground">
-      {/* Fixed Header */}
-      <div className="sticky top-0 z-10 bg-background border-b border-border shadow-sm">
-        <div className="flex items-center p-4">
-          <Package className="h-6 w-6 mr-3 text-muted-foreground" />
-          <h1 className="text-xl font-bold truncate">{project.name}</h1>
-        </div>
-      </div>
-
-      {/* Project Content */}
-      <div className="flex-1 overflow-hidden">
-        <ProjectTabs project={project} serverId={params.serverId} />
-      </div>
+    <div className='h-full'>
+      <ProjectTabs project={project} />
     </div>
-  );
+  )
 }
 
-export default ProjectIdPage; 
+export default ProjectIdPage 
