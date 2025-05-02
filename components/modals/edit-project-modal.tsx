@@ -469,7 +469,9 @@ export const EditProjectModal = () => {
                         selected={selectedStartDate}
                         onSelect={(date) => {
                           setSelectedStartDate(date);
-                          form.setValue('startDate', date);
+                          if (date) {
+                            form.setValue('startDate', date);
+                          }
                           setIsStartDateOpen(false);
                         }}
                         initialFocus
@@ -517,7 +519,9 @@ export const EditProjectModal = () => {
                         selected={selectedTargetDate}
                         onSelect={(date) => {
                           setSelectedTargetDate(date);
-                          form.setValue('targetDate', date);
+                          if (date) {
+                            form.setValue('targetDate', date);
+                          }
                           setIsTargetDateOpen(false);
                         }}
                         initialFocus
