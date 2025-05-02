@@ -52,6 +52,7 @@ export const TaskDashboard = () => {
   }, [params?.projectId]);
 
   const fetchTasks = async () => {
+    if (!params || !params.projectId) return;
     try {
       setIsLoading(true);
       const response = await fetch(`/api/projects/${params.projectId}/tasks`);
