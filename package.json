@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "clean": "rm -rf .next",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",

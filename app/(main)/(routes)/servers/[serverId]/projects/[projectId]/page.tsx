@@ -30,15 +30,19 @@ const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
     include: {
       members: {
         include: {
-          profile: true,
-        },
+          member: {
+            include: {
+              profile: true
+            }
+          }
+        }
       },
       lead: {
         include: {
-          profile: true,
-        },
-      },
-    },
+          profile: true
+        }
+      }
+    }
   })
 
   if (!project) {
