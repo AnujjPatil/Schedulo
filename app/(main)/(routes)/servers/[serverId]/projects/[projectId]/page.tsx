@@ -1,7 +1,6 @@
 // Trigger redeploy - test commit
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
-import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { ProjectTabs } from '@/components/project/project-tabs'
 import { ProjectOverview } from '@/components/project/project-overview'
@@ -20,7 +19,7 @@ const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    return auth().redirectToSignIn()
+    redirect("/sign-in")
   }
 
   const project = await db.project.findUnique({
