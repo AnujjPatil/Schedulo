@@ -1,16 +1,15 @@
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-
 import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/current-profile";
 
 const InviteCodePage = async ({
   params
 }: {
   params: { inviteCode: string }
 }) => {
-  const { userId } = auth();
+  const profile = await currentProfile();
 
-  if (!userId) {
+  if (!profile) {
     return redirect("/sign-in");
   }
 
@@ -23,7 +22,7 @@ const InviteCodePage = async ({
       inviteCode: params.inviteCode,
       members: {
         some: {
-          userId
+          profileId: profile.id
         }
       }
     }
@@ -41,7 +40,7 @@ const InviteCodePage = async ({
       members: {
         create: [
           {
-            userId
+            profileId: profile.id
           }
         ]
       }
