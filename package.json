@@ -52,7 +52,7 @@
     "framer-motion": "^12.9.4",
     "livekit-server-sdk": "^2.8.1",
     "lucide-react": "^0.331.0",
-    "next": "14.2.25",
+    "next": "14.2.26",
     "next-auth": "^4.24.11",
     "next-themes": "^0.2.1",
     "query-string": "^9.1.1",
